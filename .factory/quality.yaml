@@ -1,0 +1,7 @@
+version: v1
+commands:
+  test:
+    cmd: ["npm", "test"]
+    cwd: .
+    timeoutSeconds: 300
+requiredChecks: ["canary-ci"]
