@@ -29,3 +29,16 @@ test("rejects non-string titles", () => {
 test("rejects an empty separator", () => {
   assert.throws(() => slugify("x", ""), RangeError);
 });
+
+test("truncates to maxWords when provided", () => {
+  assert.equal(slugify("One Two Three Four", "-", 2), "one-two");
+});
+
+test("does not truncate when maxWords exceeds word count", () => {
+  assert.equal(slugify("One Two", "-", 5), "one-two");
+});
+
+test("rejects maxWords <= 0", () => {
+  assert.throws(() => slugify("x", "-", 0), RangeError);
+  assert.throws(() => slugify("x", "-", -1), RangeError);
+});
