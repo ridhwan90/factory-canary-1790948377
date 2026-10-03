@@ -42,3 +42,22 @@ test("rejects maxWords <= 0", () => {
   assert.throws(() => slugify("x", "-", 0), RangeError);
   assert.throws(() => slugify("x", "-", -1), RangeError);
 });
+
+test("maps symbols to words when symbols is true", () => {
+  assert.equal(slugify("Tom & Jerry", "-", undefined, true), "tom-and-jerry");
+  assert.equal(slugify("$100 @ stake", "-", undefined, true), "dollar-100-at-stake");
+});
+
+test("mapped words participate in maxWords truncation", () => {
+  assert.equal(slugify("A & B & C", "-", 2, true), "a-and");
+});
+
+test("does not map symbols when symbols is false", () => {
+  assert.equal(slugify("Tom & Jerry"), "tom-jerry");
+  assert.equal(slugify("Tom & Jerry", "-", undefined, false), "tom-jerry");
+});
+
+test("rejects non-boolean symbols parameter", () => {
+  assert.throws(() => slugify("test", "-", undefined, "invalid"), TypeError);
+  assert.throws(() => slugify("test", "-", undefined, null), TypeError);
+});
