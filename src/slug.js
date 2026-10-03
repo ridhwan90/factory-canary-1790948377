@@ -2,7 +2,7 @@
  * Convert a human title into a URL slug: lowercased ASCII, words joined by
  * the separator (default "-"), runs of separators collapsed.
  */
-export function slugify(title, separator = "-", maxWords) {
+export function slugify(title, separator = "-", maxWords, symbols = false) {
   if (typeof title !== "string") {
     throw new TypeError("title must be a string");
   }
@@ -13,7 +13,19 @@ export function slugify(title, separator = "-", maxWords) {
   if (maxWords !== undefined && maxWords <= 0) {
     throw new RangeError("maxWords must be greater than 0");
   }
-  let words = title
+  if (symbols !== undefined && typeof symbols !== "boolean") {
+    throw new TypeError("symbols must be a boolean");
+  }
+
+  let processedTitle = title;
+  if (symbols) {
+    processedTitle = processedTitle
+      .replace(/\$/g, " dollar ")
+      .replace(/&/g, " and ")
+      .replace(/@/g, " at ");
+  }
+
+  let words = processedTitle
     .normalize("NFKD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
